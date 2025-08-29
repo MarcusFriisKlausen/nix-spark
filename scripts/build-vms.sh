@@ -15,3 +15,5 @@ for dir in "$vms_dir"/*; do
     -I nixos-config="$config" \
     --out-link "$dir/iso"
 done
+
+echo "All VM live CDs and disk files created!"

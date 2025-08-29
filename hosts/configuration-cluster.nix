@@ -14,6 +14,7 @@
   networking.networkmanager.enable = false;
   
   environment.systemPackages = with pkgs;  [
+    vim
     spark
     python3
     python3Packages.pandas

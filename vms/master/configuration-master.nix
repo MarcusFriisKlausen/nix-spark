@@ -40,18 +40,29 @@
   networking.firewall.allowedTCPPorts = [
     22
     7077
+    7079
+    8080
   ];
 
   services.getty.autologinUser = lib.mkForce "node";
   
   systemd.services.spark-master = {
-    description = "Systemd service for starting spark as master";
+    description = "Spark Master";
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
+      Type = "forking";
+      Environment = [
+        "SPARK_LOG_DIR=/var/log/spark"
+        "SPARK_MASTER_HOST=192.168.123.101"
+        "SPARK_MASTER_PORT=7077"
+        "SPARK_DRIVER_HOST=192.168.123.101"
+        "SPARK_DRIVER_PORT=7079"
+        "PATH=/run/current-system/sw/bin:${pkgs.spark}/bin:${pkgs.spark}/sbin"
+      ];  
       ExecStart = "${pkgs.spark}/sbin/start-master.sh";
-      ExecStop = "${pkgs.spark}/sbin/stop-master.sh";
-      Restart = "always";
+      Restart = "on-failure";
+      RestartSec = "5";
       User = "root";
     };
   };

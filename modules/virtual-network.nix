@@ -40,7 +40,6 @@ in
             stp = true;
             delay = 0;
           };
-          mac.address = "52:54:00:12:34:56";
           ip = {
             address = "192.168.123.1";
             netmask = "255.255.255.0";

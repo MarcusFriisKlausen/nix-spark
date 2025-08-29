@@ -1,6 +1,6 @@
 { config, pkgs, lib, modulesPath, ... }:
 let
-  MASTER_HOSTNAME = "spark-master";
+  MASTER_IP = "192.168.123.101";
 in
 {
   imports = [
@@ -36,19 +36,29 @@ in
     python3Packages.pyspark
   ];
   
+  services.getty.autologinUser = lib.mkForce "node";
+  
   networking.firewall.allowedTCPPorts = [
     22
+    7078
+    8081
   ];
   
   systemd.services.spark-worker = {
-    description = "Systemd service for starting spark as worker";
+    description = "Spark Worker";
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${pkgs.spark}/sbin/start-worker.sh spark://${MASTER_HOSTNAME}:7077";
-      ExecStop = "${pkgs.spark}/sbin/stop-worker.sh";
-      Restart = "always";
-      RestartSec = 2;
+      Type = "forking";
+      Environment = [
+        "SPARK_LOG_DIR=/var/log/spark"
+        "SPARK_WORKER_DIR=/var/lib/spark/work"
+        "SPARK_WORKER_PORT=7078"
+        "PATH=/run/current-system/sw/bin:${pkgs.spark}/bin:${pkgs.spark}/sbin"
+      ];  
+      ExecStart = "${pkgs.spark}/sbin/start-worker.sh spark://${MASTER_IP}:7077";
+      Restart = "on-failure";
+      RestartSec = 10;
       User = "root";
     };
   };
