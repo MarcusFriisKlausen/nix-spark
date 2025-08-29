@@ -15,7 +15,7 @@
         nixvirt.nixosModules.default
         ./hosts/configuration-cluster.nix
         ./modules/virtual-network.nix
-        (import ./modules/user.nix)
+        ./modules/user.nix
       ];
     };
   };
