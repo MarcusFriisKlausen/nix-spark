@@ -32,7 +32,7 @@ in
           forward = {
             mode = "nat";
             nat = {
-              port = { start = 1024; end = 65535; };
+              port = { start = 49152; end = 65535; };
             };
           };
           bridge = {
