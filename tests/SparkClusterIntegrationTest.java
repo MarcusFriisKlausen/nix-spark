@@ -39,11 +39,12 @@ public class SparkClusterIntegrationTest {
 
             long taskId = tc.taskAttemptId();
             int cpus = tc.cpus();
+            String host = java.net.InetAddress.getLocalHost().getHostName();
 
             return java.util.Collections.singletonList(
                 String.format(
-                    "Partition %d : %d elements | taskId=%d | cpus=%d",
-                    index, count, taskId, cpus
+                    "Partition %d : %d elements | taskId=%d | cpus=%d | host=%s",
+                    index, count, taskId, cpus, host
                 )
             ).iterator();
         }, true).collect();
