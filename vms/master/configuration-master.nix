@@ -7,6 +7,11 @@
   ];
 
   networking.hostName = "spark-master";
+  networking.extraHosts = ''
+    192.168.123.101 spark-master
+    192.168.123.102 spark-worker1
+    192.168.123.103 spark-worker2
+  '';
 
   networking.useDHCP = false;
   networking.interfaces.eth0 = {
@@ -42,6 +47,7 @@
     7077
     7079
     8080
+    50051
   ];
 
   services.getty.autologinUser = lib.mkForce "node";
